@@ -13,25 +13,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello/{name}', function (string $name) {
-    return "Добро пожаловать, {$name}";
-});
 
-Route::get('/about}', function () {
+Route::get('/about', function () {
     return
         "<h1> Новостной сайт </h1> <br>
         <p>это интернет-издание, специализация которого заключается в сборе и выдаче общетематических новостей или новостных материалов на одну тему.</p>";
 });
 
-Route::get('/news', function () {
-    return "Все новости";
-});
+Route::get('/news', [NewsController::class, 'index'])
+    -> name('news');
 
-Route::get('/news/{id}', function ($id) {
-    return "Новость с определенным {$id} ";
-});
+Route::get('/news/show/{id}', [NewsController::class, 'show'])
+    ->where('id', '[0-9]')
+    ->name('news.show');
 
+
+//для админа
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function (){
+    Route::resource('/categories', AdminCategoryController::class);
+    Route::resource('/news', AdminNewsController::class);
+});
