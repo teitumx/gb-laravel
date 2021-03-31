@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
+use App\Http\Controllers\WelcomeController as WelcomeController;
+use \App\Http\Controllers\CategoryController as CategoryController;
 
-Route::get('/', function () {
+ Route::get('/', function () {
     return view('welcome');
-});
+ });
 
 
 Route::get('/about', function () {
@@ -36,7 +38,19 @@ Route::get('/news/show/{id}', [NewsController::class, 'show'])
     ->name('news.show');
 
 
-//для админа
+// Показ всех категорий
+Route::get('/categories', [CategoryController::class, 'index'])
+    -> name('news');
+
+// Показ всех новостей из определенной категории
+Route::get('/categories/show/{id}', [CategoryController::class, 'show'])
+    ->where('id', '[0-9]')
+    ->name('categories.show');
+
+//Страница приветсвия
+Route::get('/welcome', [WelcomeController::class, 'index']);
+
+//Для админа
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function (){
     Route::resource('/categories', AdminCategoryController::class);
     Route::resource('/news', AdminNewsController::class);
