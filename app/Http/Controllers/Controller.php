@@ -12,7 +12,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
      protected $newsList = [
-         'News 1',
+         '<em>News 1</em>',
          'News 2',
          'News 3',
          'News 4',

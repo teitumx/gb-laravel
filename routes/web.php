@@ -40,7 +40,7 @@ Route::get('/news/show/{id}', [NewsController::class, 'show'])
 
 // Показ всех категорий
 Route::get('/categories', [CategoryController::class, 'index'])
-    -> name('news');
+    -> name('categories');
 
 // Показ всех новостей из определенной категории
 Route::get('/categories/show/{id}', [CategoryController::class, 'show'])
