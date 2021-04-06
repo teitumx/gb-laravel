@@ -31,6 +31,8 @@
     </div>
 </section>
 <!-- Contact-->
+<x-site-contact></x-site-contact>
+<!-- Footer-->
 <x-site-footer></x-site-footer>
 
 <!-- Bootstrap core JS-->
@@ -39,8 +41,8 @@
 <!-- Third party plugin JS-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 <!-- Contact form JS-->
-<script src="{{ asset('assets/mail/jqBootstrapValidation.js') }}"></script>
-<script src="{{ asset('assets/mail/contact_me.js') }}"></script>
+<script src="{{ asset('assets/mail/jqBootstrapValidation1.js') }}"></script>
+<script src="{{ asset('assets/mail/contact_me1.js') }}"></script>
 <!-- Core theme JS-->
 <script src="{{ asset('js/scripts.js') }}"></script>
 </body>

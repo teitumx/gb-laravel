@@ -13,11 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-use App\Http\Controllers\NewsController;
+use App\Http\Controllers\NewsController as NewsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\WelcomeController as WelcomeController;
 use \App\Http\Controllers\CategoryController as CategoryController;
+use \App\Http\Controllers\ContactController as ContactController;
 
  Route::get('/', function () {
     return view('welcome');
@@ -32,6 +33,9 @@ Route::get('/about', function () {
 
 Route::get('/news', [NewsController::class, 'index'])
     -> name('news');
+
+Route::get('/news/contact', [ContactController::class, 'store'])
+    -> name('contact.store');
 
 Route::get('/news/show/{id}', [NewsController::class, 'show'])
     ->where('id', '[0-9]')

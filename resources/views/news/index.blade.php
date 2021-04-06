@@ -1,13 +1,11 @@
 @extends('layouts.main')
 
 @section('content')
-    <h1 class="section-heading text-uppercase">Новости</h1>
+    <h2 class="section-heading text-uppercase">Новости</h2>
     <hr>
 @forelse ($newsList as $key => $news)
-@php $key++ @endphp
 <div class="newscontainer">
     <div class="trend-entry d-flex">
-        <div class="number align-self-start">{{$key}}</div>
         <div class="trend-contents">
             <h2><a href="{{route('news.show', ['id' => ++$key])}}">{!! $news !!}</a></h2>
             <div class="timeline-body"><p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p></div>

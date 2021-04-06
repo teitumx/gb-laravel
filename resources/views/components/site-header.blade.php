@@ -18,6 +18,6 @@
     <div class="container">
         <div class="masthead-subheading">Добро пожаловать в Новостной Блог</div>
         <div class="masthead-heading text-uppercase">Рады видесть Вас!</div>
-        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Tell Me More</a>
+        <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Перейти к новостям</a>
     </div>
 </header>
