@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -14,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return "Список категорий";
+        $categories = (New Category())->getCategories();
+        return view('admin.news.categories.index', ['categories' => $categories]);
     }
 
     /**

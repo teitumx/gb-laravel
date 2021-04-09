@@ -98,7 +98,7 @@
         </div>
     </div>
 
-
+<h2>Всего новостей: {{ $count }}</h2>
 {{--Список новостей--}}
     <div class="row">
         <table class="table table-bordered">
@@ -107,20 +107,24 @@
             <th>ID</th>
             <th>Заголовок</th>
             <th>Дата</th>
+            <th>Текст новости</th>
             <th>Автор</th>
             <th>Категория</th>
+            <th>Статус</th>
             <th>Действия</th>
             </tr>
             </thead>
             <tbody>
-        @foreach($newsList as $key => $news)
+        @foreach($news as $newsItem)
 
             <tr>
-                <td>{{ ++$key }}</td>
-                <td>{!! $news !!}</td>
-                <td>{{ now() }}</td>
-                <td> Admin </td>
-                <td> Категория </td>
+                <td>{{ $newsItem->id }}</td>
+                <td>{{{ $newsItem->title }}}</td>
+                <td>{{ $newsItem->created_at }}</td>
+                <td>{!! $newsItem->newstext !!}</td>
+                <td> {{ $newsItem->author }} </td>
+                <td> {{ $newsItem->category_title }} </td>
+                <td> {{ $newsItem->status }} </td>
                 <td align="center">
                     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Редактировать</a>
                     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Удалить</a>
