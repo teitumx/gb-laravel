@@ -17,14 +17,14 @@ class News extends Model
     {
         if(!$isAdmin)
         {
-            return DB::table('news')
+            return DB::table($this->table)
                 ->join('categories', 'categories.id', '=', 'news.category_id')
                 ->select(['news.id', 'news.title', 'news.newstext', 'news.author', 'news.status', 'news.created_at', 'categories.title as category_title'])
                 ->where('news.status', NewsStatusEnum::PUBLISHED )
                 ->get();
         }
 
-        return DB::table('news')
+        return DB::table($this->table)
             ->join('categories', 'categories.id', '=', 'news.category_id')
             ->select(['news.id', 'news.title', 'news.newstext', 'news.author', 'news.status', 'news.created_at', 'categories.title as category_title'])
             ->get();
