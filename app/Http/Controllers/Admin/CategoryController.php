@@ -15,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = (New Category())->getCategories();
+        $categories = Category::where('is_visible', true)
+            ->paginate(7);
         return view('admin.news.categories.index', ['categories' => $categories]);
     }
 
@@ -26,7 +27,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return "Добавление категорий";
+        return view('admin.news.categories.create');
     }
 
     /**
@@ -37,7 +38,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->only('title', 'description', 'is_visible');
+        $category = Category::create($data);
+
+        //Если категория добавлена успешно
+        if($category)
+        {
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Запись успешно добавлена');
+        }
+
+        return back()->with('error', 'Не удалось добавить категорию');
     }
 
     /**
@@ -57,9 +68,9 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        return "Редактирование категорий";
+        return view('admin.news.categories.edit', ['category'=>$category]);
     }
 
     /**
@@ -69,9 +80,18 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        return "Обновление категорий";
+        $data = $request->only('title', 'description', 'is_visible');
+        $categoryUpdate = $category->fill($data)->save();
+
+        if($categoryUpdate)
+        {
+            return redirect()->route('admin.categories.index')
+                ->with('success', 'Запись успешно изменененна');
+        }
+
+        return back()->with('error', 'Не удалось изменить категорию');
     }
 
     /**

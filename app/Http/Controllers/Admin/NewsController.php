@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\NewsStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\News;
 use Illuminate\Http\Request;
 
@@ -15,11 +17,12 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $objNews = new News();
-        $news = $objNews->getNews(true);
+        $news = News::with('category')
+            ->paginate(7);
+
         return view('admin.news.index', [
             'news' => $news,
-            "count" => $objNews->getNewsCount()
+            "count" => News::count()
             ]
         );
     }
@@ -31,7 +34,10 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view('admin.news.create');
+
+        $category = Category::get();
+
+        return view('admin.news.create', ['category' => $category]);
     }
 
     /**
@@ -42,18 +48,27 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $request -> validate(['title' => 'required', 'string', 'min:2']);
-        $title = $request->input('title');
-        dd($title);
+        $request['slug'] = \Illuminate\Support\Str::slug($request['title']);
+        $data = $request->only('category_id', 'title', 'author', 'slug', 'status', 'newstext');
+        $news = News::create($data);
+
+        //Если новость добавлена успешно
+        if($news)
+        {
+            return redirect()->route('admin.news.index')
+                ->with('success', 'Запись успешно добавлена');
+        }
+
+        return back()->with('error', 'Не удалось добавить категорию');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param News $news
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(News $news)
     {
         //
     }
@@ -61,34 +76,53 @@ class NewsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param News $news
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(News $news)
     {
-        return "Редактировать новость";
+        $category = Category::all();
+        return view('admin.news.edit', ['news'=>$news, 'category'=>$category]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param News $news
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, News $news)
     {
-        return "Обновление новостей";
+        $data = $request->only('category_id', 'title', 'author', 'slug', 'status', 'newstext');
+        $newsUpdate = $news->fill($data)->save();
+
+        if($newsUpdate)
+        {
+            return redirect()->route('admin.news.index')
+                ->with('success', 'Новость успешно изменененна');
+        }
+
+        return back()->with('error', 'Не удалось изменить новость');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param News $news
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(News $news)
     {
-        return "Удаление новостей";
+        try {
+            if(request()->ajax()){
+                $news->delete();
+
+                return response()->json(['success' => true]);
+            }
+        } catch (\Exception $error) {
+        return response()->json(['success' => false]);
+        }
+
     }
 }

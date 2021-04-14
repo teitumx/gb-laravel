@@ -18,9 +18,14 @@
         <form method="post" action="{{ route('admin.news.store') }}">
             @csrf
              <div class="form-group">
-                 <label for="category">Категория</label>
-                 <select class="form-control" id="category" name="category_id">
-                     <option value="0">Выбрать категорию</option>
+                 <label for="category_id">Категория</label>
+                 <select class="form-control" id="category_id" name="category_id">
+                     @foreach($category as $categoryItem)
+                         <option id="category_id" name="category_id" value="{{ $categoryItem->id }}">{{ $categoryItem->title }}</option>
+
+                     @endforeach
+
+
                  </select>
              </div>
 
@@ -30,13 +35,28 @@
             </div>
 
             <div class="form-group">
+                <label for="author">Автор</label>
+                <input type="text" id="author" name="author" class="form-control" value="{{ old('author') }}">
+            </div>
+
+            <div class="form-group">
                 <label for="slug">Slug</label>
-                <input type="text" id="slug" name="slug" class="form-control" value="{{ old('slug') }}">
+                <input type="text" id="slug" name="slug" class="form-control" value=" {{ old('slug') }}">
+
+            </div>
+
+            <div class="form-group">
+                <label for="status">Статус</label>
+            <select class="form-control" id="status" name="status">
+                <option value="draft">Черновик</option>>
+                <option value="published">Опубликовано</option>>
+                <option value="blocked">Заблокировано</option>>
+            </select>
             </div>
 
             <div class="form-group">
                 <label for="description">Новость</label>
-                <textarea name="description" id="description" class="form-control">{!! old('description') !!}</textarea>
+                <textarea name="newstext" id="newstext" class="form-control">{!! old('newstext') !!}</textarea>
             </div>
 
             <br>

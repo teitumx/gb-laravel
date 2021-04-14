@@ -98,6 +98,9 @@
         </div>
     </div>
 
+    @if(session()->has('success'))
+        <div class="alert alert-success">{{ session()->get('success') }}</div>
+    @endif
 
     {{--Список категорий--}}
     <div class="row">
@@ -120,7 +123,7 @@
                     <td>{{ $category->description }}</td>
                     <td> {{ $category-> created_at }} </td>
                     <td align="center">
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Редактировать</a>
+                        <a href="{{ route('admin.categories.edit', ['category' => $category]) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Редактировать</a>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Удалить</a>
                     </td>
                 </tr>
@@ -128,6 +131,7 @@
             </tbody>
         </table>
     </div>
+    <div>{{ $categories->links() }}</div>
 
 
 

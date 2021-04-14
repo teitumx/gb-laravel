@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 @section('content')
 
-
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Админ Панель - Список новостей</h1>
@@ -98,6 +97,9 @@
         </div>
     </div>
 
+    @if(session()->has('success'))
+        <div class="alert alert-success">{{ session()->get('success') }}</div>
+    @endif
 <h2>Всего новостей: {{ $count }}</h2>
 {{--Список новостей--}}
     <div class="row">
@@ -119,22 +121,48 @@
 
             <tr>
                 <td>{{ $newsItem->id }}</td>
-                <td>{{{ $newsItem->title }}}</td>
+                <td>{{ $newsItem->title }}</td>
                 <td>{{ $newsItem->created_at }}</td>
                 <td>{!! $newsItem->newstext !!}</td>
                 <td> {{ $newsItem->author }} </td>
-                <td> {{ $newsItem->category_title }} </td>
+                <td> {{ $newsItem->category->title }} </td>
                 <td> {{ $newsItem->status }} </td>
                 <td align="center">
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Редактировать</a>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Удалить</a>
+                    <a href="{{ route('admin.news.edit', ['news' => $newsItem]) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Редактировать</a>
+                    <a href="javascript:;" class="delete" rel="{{ $newsItem->id }}">Удалить</a>
+
+                    {{--                    <a href="javascript:;" class="delete" class="delete d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" rel="{{ $newsItem->id }}">Удалить</a>--}}
+
                 </td>
             </tr>
         @endforeach
             </tbody>
         </table>
     </div>
+    <div>{{ $news->links() }}</div>
+    <script>
+        $(function() {
+        $('.delete').on('click', function () {
 
+            let id = $(this).attr('rel');
 
+            if(confirm("Удалить запись с ID = " + id  + "?")){
+
+                $.ajax({
+                    method: "delete",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Content-Type': 'application/json'
+                    },
+                    url: "/admin/news/" + id,
+                    complete: function (response){
+                        alert('Запись удалена')
+                    }
+                });
+            };
+        });
+        });
+    </script>
 
 @endsection
+

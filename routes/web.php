@@ -20,10 +20,6 @@ use App\Http\Controllers\WelcomeController as WelcomeController;
 use \App\Http\Controllers\CategoryController as CategoryController;
 use \App\Http\Controllers\ContactController as ContactController;
 
- Route::get('/', function () {
-    return view('welcome');
- });
-
 
 Route::get('/about', function () {
     return
@@ -31,7 +27,7 @@ Route::get('/about', function () {
         <p>это интернет-издание, специализация которого заключается в сборе и выдаче общетематических новостей или новостных материалов на одну тему.</p>";
 });
 
-Route::get('/news', [NewsController::class, 'index'])
+Route::get('/', [NewsController::class, 'index'])
     -> name('news');
 
 Route::get('/news/contact', [ContactController::class, 'store'])
@@ -51,11 +47,11 @@ Route::get('/categories/show/{id}', [CategoryController::class, 'show'])
     ->where('id', '[0-9]')
     ->name('categories.show');
 
-//Страница приветсвия
-Route::get('/welcome', [WelcomeController::class, 'index']);
 
 //Для админа
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function (){
     Route::resource('/categories', AdminCategoryController::class);
     Route::resource('/news', AdminNewsController::class);
 });
+
+Route::delete('admin/news/delete/{$id}', [NewsController::class, 'destroy']);
