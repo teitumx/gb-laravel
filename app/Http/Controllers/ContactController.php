@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactForm;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
@@ -11,15 +12,9 @@ class ContactController extends Controller
 
     }
 
-    public function store(Request $request)
+    public function store(ContactForm $request)
     {
-        $data = [
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'message' => $request->input('message')
-        ];
-        return view('news.contact', ["data" => $data]);
+        return view('news.contact', ["data" => $request->validated()]);
 
     }
 

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateCategory;
+use App\Http\Requests\UpdateCategory;
 use App\Models\Category;
+use App\Models\News;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -33,22 +36,21 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CreateCategory $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCategory $request): \Illuminate\Http\Response
     {
-        $data = $request->only('title', 'description', 'is_visible');
-        $category = Category::create($data);
+        $category = Category::create($request->validated());
 
         //Если категория добавлена успешно
         if($category)
         {
             return redirect()->route('admin.categories.index')
-                ->with('success', 'Запись успешно добавлена');
+                ->with('success', trans('messages.admin.categories.create.success'));
         }
 
-        return back()->with('error', 'Не удалось добавить категорию');
+        return back()->with('error', trans('messages.admin.categories.create.fail'));
     }
 
     /**
@@ -76,22 +78,21 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param UpdateCategory $request
+     * @param Category $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategory $request, Category $category)
     {
-        $data = $request->only('title', 'description', 'is_visible');
-        $categoryUpdate = $category->fill($data)->save();
+        $categoryUpdate = $category->fill($request->validated())->save();
 
         if($categoryUpdate)
         {
             return redirect()->route('admin.categories.index')
-                ->with('success', 'Запись успешно изменененна');
+                ->with('success', trans('messages.admin.categories.update.success'));
         }
 
-        return back()->with('error', 'Не удалось изменить категорию');
+        return back()->with('error', trans('messages.admin.categories.update.fail'));
     }
 
     /**
@@ -100,8 +101,16 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        return "Удаление категорий";
+        try {
+            if(request()->ajax()){
+                $category->delete();
+
+                return response()->json(['success' => true]);
+            }
+        } catch (\Exception $error) {
+            return response()->json(['success' => false]);
+        }
     }
 }

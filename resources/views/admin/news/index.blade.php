@@ -129,9 +129,8 @@
                 <td> {{ $newsItem->status }} </td>
                 <td align="center">
                     <a href="{{ route('admin.news.edit', ['news' => $newsItem]) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Редактировать</a>
-                    <a href="javascript:;" class="delete" rel="{{ $newsItem->id }}">Удалить</a>
-
-                    {{--                    <a href="javascript:;" class="delete" class="delete d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" rel="{{ $newsItem->id }}">Удалить</a>--}}
+{{--                    <a href="javascript:;" class="delete" rel="{{ $newsItem->id }}">Удалить</a>--}}
+                    <a href="javascript:;" class="delete d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" rel="{{ $newsItem->id }}">Удалить</a>
 
                 </td>
             </tr>
@@ -140,29 +139,33 @@
         </table>
     </div>
     <div>{{ $news->links() }}</div>
-    <script>
-        $(function() {
-        $('.delete').on('click', function () {
 
-            let id = $(this).attr('rel');
-
-            if(confirm("Удалить запись с ID = " + id  + "?")){
-
-                $.ajax({
-                    method: "delete",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                        'Content-Type': 'application/json'
-                    },
-                    url: "/admin/news/" + id,
-                    complete: function (response){
-                        alert('Запись удалена')
-                    }
-                });
-            };
-        });
-        });
-    </script>
 
 @endsection
+
+@push('js')
+    <script>
+        $(function() {
+            $('.delete').on('click', function () {
+
+                let id = $(this).attr('rel');
+
+                if(confirm("Удалить запись с ID = " + id  + "?")){
+
+                    $.ajax({
+                        method: "delete",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                            'Content-Type': 'application/json'
+                        },
+                        url: "/admin/news/" + id,
+                        complete: function (response){
+                            alert('Запись удалена')
+                        }
+                    });
+                };
+            });
+        });
+    </script>
+@endpush
 

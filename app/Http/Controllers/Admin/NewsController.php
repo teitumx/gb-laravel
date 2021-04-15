@@ -4,16 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\NewsStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateNews;
+use App\Http\Requests\UpdateNews;
 use App\Models\Category;
 use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class NewsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -30,7 +33,7 @@ class NewsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -43,12 +46,12 @@ class NewsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param CreateNews $request
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(CreateNews $request)
     {
-        $request['slug'] = \Illuminate\Support\Str::slug($request['title']);
+        $request['slug'] = \Illuminate\Support\Str::slug($request['title']);  // создание слага
         $data = $request->only('category_id', 'title', 'author', 'slug', 'status', 'newstext');
         $news = News::create($data);
 
@@ -56,17 +59,17 @@ class NewsController extends Controller
         if($news)
         {
             return redirect()->route('admin.news.index')
-                ->with('success', 'Запись успешно добавлена');
+                ->with('success', trans('messages.admin.news.create.success'));
         }
 
-        return back()->with('error', 'Не удалось добавить категорию');
+        return back()->with('fail', trans('messages.admin.news.create.fail'));
     }
 
     /**
      * Display the specified resource.
      *
      * @param News $news
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(News $news)
     {
@@ -77,7 +80,7 @@ class NewsController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param News $news
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(News $news)
     {
@@ -88,11 +91,11 @@ class NewsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param UpdateNews $request
      * @param News $news
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function update(Request $request, News $news)
+    public function update(UpdateNews $request, News $news)
     {
         $data = $request->only('category_id', 'title', 'author', 'slug', 'status', 'newstext');
         $newsUpdate = $news->fill($data)->save();
@@ -100,17 +103,17 @@ class NewsController extends Controller
         if($newsUpdate)
         {
             return redirect()->route('admin.news.index')
-                ->with('success', 'Новость успешно изменененна');
+                ->with('success', trans('messages.admin.news.update.success'));
         }
 
-        return back()->with('error', 'Не удалось изменить новость');
+        return back()->with('error', trans('messages.admin.news.update.fail'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param News $news
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(News $news)
     {

@@ -124,7 +124,7 @@
                     <td> {{ $category-> created_at }} </td>
                     <td align="center">
                         <a href="{{ route('admin.categories.edit', ['category' => $category]) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Редактировать</a>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Удалить</a>
+                        <a href="javascript:;" class="delete d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" rel="{{ $category->id }}">Удалить</a>
                     </td>
                 </tr>
             @endforeach
@@ -134,5 +134,30 @@
     <div>{{ $categories->links() }}</div>
 
 
-
 @endsection
+
+@push('javascript')
+    <script>
+        $(function() {
+            $('.delete').on('click', function () {
+
+                let id = $(this).attr('rel');
+
+                if(confirm("Удалить категорию с ID = " + id  + "?")){
+
+                    $.ajax({
+                        method: "delete",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                            'Content-Type': 'application/json'
+                        },
+                        url: "/admin/categories/" + id,
+                        complete: function (response){
+                            alert('Запись удалена')
+                        }
+                    });
+                };
+            });
+        });
+    </script>
+@endpush
