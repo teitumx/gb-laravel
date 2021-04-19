@@ -15,24 +15,28 @@
 
             @endif
 
-            <form method="post" action="{{ route('admin.categories.update', ['category'=>$category]) }}">
+            <form method="post" action="{{ route('admin.users.update', ['user'=>$user]) }}">
                 @csrf
                 @method('PUT')
 
                 <div class="form-group">
-                    <label for="title">Заголовок</label>
-                    <input type="text" id="title" name="title" class="form-control" value="{{ $category->title }}">
+                    <label for="name">Имя</label>
+                    <input type="name" id="name" name="name" class="form-control" value="{{ $user->name }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="description">Описание</label>
-                    <textarea name="description" id="description" class="form-control">{!! $category->description !!}</textarea>
+                    <label for="email">Имя</label>
+                    <input type="email" id="email" name="email" class="form-control" value="{{ $user->email }}">
                 </div>
 
+
                 <div class="form-group">
-                    <label for="is_visible">Отображение</label>
-                    <input type="checkbox" id="is_visible" name="is_visible" value="1">
-                    @if ( $category->is_visible === true )checked @endif
+                    <label for="is_visible">Роль: </label>
+                    <select size="1" name="is_Admin">
+                        <option value="1">Администратор</option>
+                        <option @if( $user->is_Admin !== true ) selected @endif value="0">Гость</option>
+
+                    </select>
                 </div>
 
                 <br>
