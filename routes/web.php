@@ -20,7 +20,9 @@ use App\Http\Controllers\Admin\UsersController as AdminUsersController;
 use \App\Http\Controllers\CategoryController as CategoryController;
 use \App\Http\Controllers\ContactController as ContactController;
 use App\Http\Controllers\Account\AccountController as AccountController;
+use \App\Http\Controllers\ParserController;
 use \Illuminate\Support\Facades\Auth as Auth;
+use App\Http\Controllers\SocialiteController as SocialiteController;
 
 
 Route::get('/', function () {
@@ -47,11 +49,20 @@ Route::get('/logout', function (){
     return redirect()->route('news');
 }) -> name('logout');
 
+Route::get('/parsing', ParserController::class);
+
+//Авторизация через VK
+Route::group(['middleware' => 'guest', 'prefix' => 'socialite'], function () {
+    Route::get('/auth/vk', [SocialiteController::class, 'init'])->name('vk.init');
+    Route::get('/auth/vk/callback', [SocialiteController::class, 'callback'])->name('vk.callback');
+    Route::get('/auth/fb', [SocialiteController::class, 'initFb'])->name('fb.init');
+    Route::get('/auth/vk/callback', [SocialiteController::class, 'callbackFb'])->name('fb.callback');
+});
+
 
 //Для админа
 Route::group(['middleware' => 'auth'], function() {
 
-    //Для админа
     Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
         Route::resource('/categories', AdminCategoryController::class);
         Route::resource('/news', AdminNewsController::class);

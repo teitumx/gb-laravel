@@ -63,6 +63,10 @@
                                         {{ __('Забыли пароль?') }}
                                     </a>
                                 @endif
+                                <br>
+                                <a href="{{ route('vk.init') }}">Войти через Vkontakte</a>
+                                <br>
+                                <a href="{{ route('fb.init') }}">Войти через FaceBook</a>
                             </div>
                         </div>
                     </form>
