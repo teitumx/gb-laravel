@@ -22,7 +22,8 @@ class News extends Model
         'author',
         'created_at',
         'slug',
-        'status'
+        'status',
+        'img'
     ];
 
 

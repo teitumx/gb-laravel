@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\News;
+use Illuminate\Support\Facades\Storage;
 use Orchestra\Parser\Xml\Facade as XmlParser;
 use \Illuminate\Support\Str as Str;
 
@@ -10,13 +11,13 @@ class ParserService
 {
     protected $url;
 
-    public function setUrl(string $url)
+    public function setUrl(string $url): self
     {
         $this->url = $url;
         return $this;
     }
 
-    public function parsing()
+    public function parsing(): void
     {
         $xml = XmlParser::load($this->url);
 
@@ -38,10 +39,15 @@ class ParserService
             ]
         ]);
 
-        $this->saveNews($data);
+        $name = explode('/', $this->url);
+        $filename = end($name);
+       Storage::append('parsing/' . $filename . '.txt', json_encode($data));
+
+       $this->saveNews($data);
+
     }
 
-// Сохранение новостей
+// Сохранение парсинга новостей
 
         public function saveNews($data){
 

@@ -52,7 +52,7 @@ class NewsController extends Controller
     public function store(CreateNews $request)
     {
         $request['slug'] = \Illuminate\Support\Str::slug($request['title']);  // создание слага
-        $data = $request->only('category_id', 'title', 'author', 'slug', 'status', 'newstext');
+        $data = $request->only('category_id', 'title', 'author', 'slug', 'status', 'newstext', 'img');
         $news = News::create($data);
 
         //Если новость добавлена успешно
@@ -97,10 +97,23 @@ class NewsController extends Controller
      */
     public function update(UpdateNews $request, News $news)
     {
-        $data = $request->only('category_id', 'title', 'author', 'slug', 'status', 'newstext');
-        $newsUpdate = $news->fill($data)->save();
+        $validated = $request->validated();
 
-        if($newsUpdate)
+        if($request->hasFile('img'))
+        {
+            $img = $request->file('img');
+            $originalName = $img->getClientOriginalName();
+            $originalExt = $img->getClientOriginalExtension();
+            $fileName = uniqid();
+            $fileLink = $img->storeAs('news', $fileName . '.' . $originalExt, 'public');
+            $validated['img'] = $fileLink;
+        }
+//        $data = $request->only('category_id', 'title', 'author', 'slug', 'status', 'newstext', 'img');
+//        $newsUpdate = $news->fill($data)->save();
+
+        $news = $news->fill($validated);
+        $news->category_id = $validated['category_id'];
+        if($news->save())
         {
             return redirect()->route('admin.news.index')
                 ->with('success', trans('messages.admin.news.update.success'));

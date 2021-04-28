@@ -15,7 +15,7 @@
 
             @endif
 
-            <form method="post" action="{{ route('admin.news.update', ['news'=>$news]) }}">
+            <form method="post" enctype="multipart/form-data" action="{{ route('admin.news.update', ['news'=>$news]) }}">
                 @csrf
                 @method('PUT')
 
@@ -59,6 +59,12 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="img">Изображение</label>
+                    <img src=" {{ \Storage::disk('public')->url($news->img) }}" style="width: 200px" alt="">
+                    <input type="file" id="img" name="img" class="form-control">
+                </div>
+
+                <div class="form-group">
                     <label for="description">Новость</label>
                     <textarea name="newstext" id="newstext" class="form-control">{!! $news->newstext !!}</textarea>
                 </div>
@@ -71,5 +77,44 @@
             </form>
         </div>
     </div>
+
+{{--    <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>--}}
+{{--    <script>--}}
+{{--        ClassicEditor--}}
+{{--            .create( document.querySelector( '#newstext' ) )--}}
+{{--            .then( editor => {--}}
+{{--                console.log( editor );--}}
+{{--            } )--}}
+{{--            .catch( error => {--}}
+{{--                console.error( error );--}}
+{{--            } );--}}
+{{--    </script>--}}
+
+    <script src="//cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>
+    <script>
+        var options = {
+            filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+            filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+            filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+            filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
+        };
+    </script>
+    <script>
+        CKEDITOR.replace('newstext', options);
+    </script>
+
 @endsection
 
+{{--@push('js')--}}
+{{--    <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>--}}
+{{--    <script>--}}
+{{--        ClassicEditor--}}
+{{--            .create( document.querySelector( '#newstext' ) )--}}
+{{--            .then( editor => {--}}
+{{--                console.log( editor );--}}
+{{--            } )--}}
+{{--            .catch( error => {--}}
+{{--                console.error( error );--}}
+{{--            } );--}}
+{{--    </script>--}}
+{{--@endpush--}}

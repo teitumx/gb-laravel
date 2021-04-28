@@ -55,6 +55,11 @@
             </div>
 
             <div class="form-group">
+                <label for="image">Изображение</label>
+                <input type="file" id="image" name="image" class="form-control">
+            </div>
+
+            <div class="form-group">
                 <label for="description">Новость</label>
                 <textarea name="newstext" id="newstext" class="form-control">{!! old('newstext') !!}</textarea>
             </div>

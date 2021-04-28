@@ -29,7 +29,8 @@ class UpdateNews extends FormRequest
             'newstext' => 'required|min:3',
             'slug' => 'sometimes',
             'status' => 'sometimes',
-            'author' => 'sometimes|string'
+            'author' => 'sometimes|string',
+            'img' => 'sometimes|image:png'
         ];
     }
 
